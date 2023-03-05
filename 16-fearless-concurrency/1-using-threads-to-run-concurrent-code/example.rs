@@ -1,13 +1,13 @@
 use std::thread;
 
 fn main( ) {
+    let vector= vec![ 1,2,3 ];
+
     let workerThread= thread::spawn(
-        | | {
-            //* code that will run in this worker thread */
+        move | | {
+            println!("the vector is - {:?}", vector);
         }
     );
-
-    //* code that will run in the main thread */
 
     // this will block the main thread until the worker thread finishes execution
     workerThread.join( )

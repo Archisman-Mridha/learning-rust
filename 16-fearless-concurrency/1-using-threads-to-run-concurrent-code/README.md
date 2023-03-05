@@ -33,3 +33,25 @@ fn main( ) {
         .unwrap( );
 }
 ```
+
+## Using move closures with threads
+
+If the worker thread wants to use a value from the parent thread, we need to add the `move` keyword with the closure being passed as the argument. This **moves the ownership of that value from the parent thread to the worker thread**. Here is an example -
+```rust
+fn main( ) {
+    let vector= vec![ 1,2,3 ];
+
+    let workerThread= thread::spawn(
+        move | | {
+            // ownership of `vector` moved to the worker thread
+            println!("the vector is - {:?}", vector);
+        }
+    );
+
+    // this will block the main thread until the worker thread finishes execution
+    workerThread.join( )
+        .unwrap( );
+}
+```
+
+We need to move the ownership of *vector* from the main to the worker thread, because in this way, *vector* **cannot be dropped by the main thread while the worker thread is still using it**.
