@@ -1,6 +1,6 @@
 # Using message passing to transfer data between threads
 
-One increasingly popular approach to ensuring safe concurrency is `message passing`, where threads or actors communicate by **sending each other messages containing data** rather than relying on shared data. Rust implements message passing between threads using `channels`.
+One increasingly popular approach to ensuring safe concurrency is `message passing`, where threads communicate by **sending each other messages pointing to some data**. Rust implements message passing between threads using `channels`.
 A channel has 2 parts - a `transmitter` (data is put here by a thread) and a `receiver` (data is consumed from here by a thread). The channel is said to be **closed if the transmitter or receiver is dropped**.
 The way Rust implements a channel - mpsc (`multiple producers, single consumer`). This means that there can be multiple transmitters but only a single receiver for a channel.
 
@@ -31,3 +31,5 @@ fn main( ) {
 ```
 
 Instead of `recv` we can use the `try_recv` method which **doesn't block the parent thread** and **immediately returns a message if available**.
+
+## Channels and ownership transferrence
