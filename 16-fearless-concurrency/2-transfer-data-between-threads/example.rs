@@ -3,24 +3,28 @@
 use std::{sync::mpsc::channel, thread};
 
 fn main( ) {
-    let (transmitter, receiver)= channel( );
+    let (transmitterA, receiver)= channel( );
+    let transmitterB= transmitterA.clone( ); // creating another transmitter
 
-    let workerThread= thread::spawn(
+    thread::spawn(
         move | | {
-            let message= "hi".to_string( );
+            let message= "hi from worker-thread A".to_string( );
 
             //* `send` can return an error if the receiver part of the channel has been dropped */
-            transmitter.send(message)
+            transmitterA.send(message)
                 .unwrap( );
         }
     );
 
-    //* `recv` blocks the main thread until a message is received */
-    // `recv` can also return an error if the transmitter part of the channel is closed
-    let message= receiver.recv( )
-        .unwrap( );
-    println!("message recived from the worker thread - {}", message);
+    thread::spawn(
+        move | | {
+            let message= "hi from worker-thread B".to_string( );
 
-    workerThread.join( )
-        .unwrap( );
+            transmitterB.send(message)
+                .unwrap( );
+        }
+    );
+
+    for message in receiver {
+        println!("message received from the channel - {}", message);}
 }
