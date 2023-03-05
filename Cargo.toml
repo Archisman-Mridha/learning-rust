@@ -11,4 +11,8 @@ path= "./16-fearless-concurrency/1-using-threads-to-run-concurrent-code/example.
 name= "transfer-data-between-threads"
 path= "./16-fearless-concurrency/2-transfer-data-between-threads/example.rs"
 
+[[bin]]
+name= "shared-state-concurrency"
+path= "./16-fearless-concurrency/3-shared-state-concurrency/example.rs"
+
 [dependencies]
