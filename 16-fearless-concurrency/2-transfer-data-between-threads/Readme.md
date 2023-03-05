@@ -33,3 +33,32 @@ fn main( ) {
 Instead of `recv` we can use the `try_recv` method which **doesn't block the parent thread** and **immediately returns a message if available**.
 
 ## Channels and ownership transferrence
+Here is an example of how, **ownership rules and channels combine in Rust to prevent concurrency related runtime problems**. Consider this code -
+```rust
+fn main( ) {
+    let (transmitter, receiver)= channel( );
+
+    let workerThread= thread::spawn(
+        move | | {
+            let message= "hi".to_string( );
+
+            transmitter.send(message)
+                .unwrap( );
+
+            /*
+                The compiler will give an error here. Because `message` is sent to the channel and now can be consumed by another
+                thread. So there can be situations, where this thread and the other thread can try to perform operations on
+                `message` simulataneously thus leading to a race condition.
+                When we send `message` to the channel, this worker thread loses the ownership.
+            */
+            println!("message sent to the channel - {:?}", message);
+        }
+    );
+
+    let message= receiver.recv( )
+        .unwrap( );
+
+    workerThread.join( )
+        .unwrap( );
+}
+```
