@@ -1,0 +1,10 @@
+[package]
+name = "learning-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name= "using-threads-to-run-concurrent-code"
+path= "./16-fearless-concurrency/1-using-threads-to-run-concurrent-code/example.rs"
+
+[dependencies]
